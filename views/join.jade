@@ -1,4 +1,10 @@
 block content
   form(method="POST", action="/join", enctype="multipart/form-data")
-    // TODO: create join room form
-    
+    div
+        label(for="roomNumber") Room number<br />
+        input#roomNumber(name="roomNumber", type="text")
+    div
+        label(for="username") Username<br />
+        input#username(name="username", type="text")
+    div
+        input(type="submit", value="Join")
