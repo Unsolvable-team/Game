@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
     //TODO: print the number of rooms active
     res.render('index', { title: 'Unsolvable', roomcount: 0 });
 });
