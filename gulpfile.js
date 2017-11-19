@@ -13,7 +13,7 @@ gulp.task('sass', function() {
             sourceMap: true,
             debug: true
         }))
-        .pipe(gulp.dest('./public/stylesheets'));
+        .pipe(gulp.dest('./public'));
 });
 
 gulp.task('sass:watch', function() {
