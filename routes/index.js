@@ -3,7 +3,8 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+    //TODO: print the number of rooms active
+    res.render('index', { title: 'Unsolvable', roomcount: 0 });
 });
 
 module.exports = router;
