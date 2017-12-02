@@ -5,8 +5,8 @@ const io = require('socket.io')(http);
 const path = require('path');
 const bodyParser = require('body-parser');
 
-const port = 3000;
-const hostname = 'localhost';
+const port = 80;
+const hostname = '0.0.0.0';
 let gameservice = require('./services/gameservice');
 const router = require('./routes/static.js')(gameservice);
 

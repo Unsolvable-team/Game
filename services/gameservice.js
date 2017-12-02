@@ -3,7 +3,6 @@ const gameroom = require('../models/gameroom.model');
 let rooms = [];
 //creates a new room with unique code and returns that code
 let newRoom = () => {
-    console.log('creating new room');
     const p = new Promise((res, rej) => {
         let room = new gameroom();
 
@@ -23,11 +22,13 @@ let newPlayer = (roomcode, name, socket) => {
                 rej('room not found');
             } else {
                 let room = rooms[ind];
-                room.players.foreach((player) => {
-                    if (player.name === name) {
-                        rej('player name already exists');
-                    }
-                });
+                if (room.players.length > 0) {
+                    room.players.forEach((player) => {
+                        if (player.name === name) {
+                            rej('player name already exists');
+                        }
+                    });
+                }
                 res(room.addPlayer(name, socket));
             }
         });
@@ -60,7 +61,7 @@ let findRoom = (roomcode) => {
         res(ind);
     });
 
-    return p
+    return p;
 };
 //creates a new master and adds it to the room, validation occurs
 let newMaster = (roomcode, socket) => {
