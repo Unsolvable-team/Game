@@ -51,6 +51,7 @@ class gameroom {
                         res();
                         return;
                     }, 60 * 1000); //time to get ready
+                    this.timerUpdate(60 * 1000);
 
                     //if everyone is ready
                 } else if (readycount === this.players.length) {
@@ -119,7 +120,7 @@ class gameroom {
                     this.timer = setTimeout(() => {
                         this.finishQuestion();
                     }, 30 * 1000); // after 30s
-
+                    this.timerUpdate(30 * 1000);
                     this.masterUpdate();
                     this.playerUpdate();
                     this.allowAnwsers = true;
@@ -139,6 +140,7 @@ class gameroom {
             clearInterval(this.timer);
         }
         this.timer = null;
+        this.timerUpdate(0);
     }
 
     /**
@@ -226,16 +228,12 @@ class gameroom {
         }
         /**
          *  sends the current timer state to masters
-         * @param {integer} time time (in milliseconds) to send to masters 
+         * @param {number} time time (in milliseconds) to send to masters 
          */
     timerUpdate(time) {
-            new Promise((res, rej) => {
-                this.masters.forEach((socket) => {
-                    socket.emit('timerUpdate', { time: time });
-                });
-                res();
-            }).then();
-
+            this.masters.forEach((socket) => {
+                socket.emit('timerUpdate', { time: time });
+            });
         }
         /**
          * sends the current question to all players
