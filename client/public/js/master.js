@@ -22,9 +22,12 @@ master.init = function() {
         }
         window += '<ul class= "players">';
         if (master.state.players.length > 0) {
-            master.state.players.forEach(name => {
+            master.state.players.forEach(player => {
                 window += '<li>';
-                window += name;
+                window += player.name;
+                if (player.ready) {
+                    window += '<span class="readystate">  ready!</span>';
+                }
                 window += '</li>';
             });
         }
