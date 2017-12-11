@@ -15,12 +15,20 @@ class gameroom {
         this.timer = null;
     }
 
+    /**
+     * adds master to this room
+     * @param {Socket} socket  the socket the master is connected on
+     */
     addMaster(socket) {
         //add event managers
         this.masters.push(socket);
         this.masterUpdate();
     }
 
+    /**
+     * checks wether or not the game is ready to start and starts appropriate timers when neccesary
+     * @returns {Promise} promise
+     */
     checkStart() {
         const p = new Promise((res, rej) => {
             if (this.players.length === 0) {
@@ -65,6 +73,10 @@ class gameroom {
         return p;
     }
 
+    /**
+     * checks wether or not to stop taking anwsers from players
+     * @returns {Promise} promise
+     */
     checkFinishQuestion() {
         const p = new Promise((res, rej) => {
             //if game has started
@@ -90,32 +102,46 @@ class gameroom {
         return p;
     }
 
+    /**
+     * gets the next question from riddler. 
+     * updates players and masters. 
+     * Starts timer to stop taking anwsers from players
+     */
     nextQuestion() {
-        this.stoptimer();
-        this.round++;
-        this.resetReadystate();
-        if (this.round > 0) {
-            this.riddler.getQuestion().then((q) => {
-                this.currentquestion = q;
-                this.timer = setTimeout(() => {
-                    this.finishQuestion();
-                }, 30 * 1000); // after 30s
+        new Promise((res, rej) => {
+            this.stoptimer();
+            this.round++;
+            this.resetReadystate();
+            if (this.round > 0) {
+                this.riddler.getQuestion().then((q) => {
+                    this.currentquestion = q;
+                    this.timer = setTimeout(() => {
+                        this.finishQuestion();
+                    }, 30 * 1000); // after 30s
 
-                this.masterUpdate();
-                this.playerUpdate();
-            }, (err) => {
+                    this.masterUpdate();
+                    this.playerUpdate();
+                }, (err) => {
 
-            });
-        }
+                });
+            }
+        }).then();
+
     }
 
+    /**
+     * Stops the current timer if one is running and sets the value to null
+     */
     stoptimer() {
-        if (this.timer !== null && this.timer) {
+        if (this.timer !== null) {
             clearInterval(this.timer);
-            this.timer = null;
         }
+        this.timer = null;
     }
 
+    /**
+     * sends questionresults to master, starts next question after a time
+     */
     finishQuestion() {
         this.stoptimer();
         //show results
@@ -126,61 +152,92 @@ class gameroom {
         }, 10 * 1000); //after 10s
     }
 
+    /**
+     * Creates a new player object and adds it to the room.
+     * Also adds all eventslisteners for the player.
+     * @param {string} name the name of the player
+     * @param {Socket} socket the socket the player is connected on
+     */
     addPlayer(name, socket) {
-        let plyr = new player(name, socket);
-        this.players.push(plyr);
-        //add event managers
+            let plyr = new player(name, socket);
+            this.players.push(plyr);
+            //add event managers
 
-        socket.on('anwser', (data) => {
-            plyr.ready = true;
-            this.masterUpdate();
+            socket.on('anwser', (data) => {
+                plyr.ready = true;
+                this.masterUpdate();
 
+                if (this.round === 0) {
+                    this.checkStart().then((res) => {
+                        this.nextQuestion();
+                    }, (rej) => {
+
+                    });
+                } else if (this.round > 0) {
+                    this.checkFinishQuestion().then((res) => {
+                        this.finishQuestion();
+                    }, (rej) => {
+
+                    });
+                }
+            });
+
+            //if game has not started
             if (this.round === 0) {
-                this.checkStart().then((res) => {
-                    this.nextQuestion();
-                }, (rej) => {
-
-                });
-            } else if (this.round > 0) {
-                this.checkFinishQuestion().then((res) => {
-                    this.finishQuestion();
-                }, (rej) => {
-
+                //ask if player is ready
+                socket.emit('question', {
+                    q: 'ready to start?',
+                    a: ['ready']
                 });
             }
-        });
-
-        //if game has not started
-        if (this.round === 0) {
-            //ask if player is ready
-            socket.emit('question', {
-                q: 'ready to start?',
-                a: ['ready']
+            this.masterUpdate();
+        }
+        /**
+         * sets readystate of all players to false
+         */
+    resetReadystate() {
+            this.players.forEach((player) => {
+                player.ready = false;
             });
         }
-        this.masterUpdate();
-    }
-    resetReadystate() {
-        this.players.forEach((player) => {
-            player.ready = false;
-        });
-    }
+        /**
+         * sends gamestate object to all masters
+         */
     masterUpdate() {
-        this.generateGamestate().then((state) => {
-            this.masters.forEach(socket => {
-                socket.emit('gameUpdate', state);
+            this.generateGamestate().then((state) => {
+                this.masters.forEach(socket => {
+                    socket.emit('gameUpdate', state);
+                });
             });
-        });
+        }
+        /**
+         *  sends the current timer state to masters
+         * @param {integer} time time (in milliseconds) to send to masters 
+         */
+    timerUpdate(time) {
+            new Promise((res, rej) => {
+                this.masters.forEach((socket) => {
+                    socket.emit('timerUpdate', { time: time });
+                });
+                res();
+            }).then();
 
-    }
+        }
+        /**
+         * sends the current question to all players
+         */
     playerUpdate() {
-        this.players.forEach((player) => {
-            player.socket.emit('question', {
-                q: this.currentquestion.q,
-                a: this.currentquestion.a
+            this.players.forEach((player) => {
+                player.socket.emit('question', {
+                    q: this.currentquestion.q,
+                    a: this.currentquestion.a
+                });
             });
-        });
-    }
+        }
+        /**
+         * generates a gamestate object
+         * @returns {Promise} promise object,  res is the gamestate object
+         */
     generateGamestate() {
         const p = new Promise((res, rej) => {
             let plyrs = [];
