@@ -13,6 +13,7 @@ class gameroom {
         this.currentquestion = null;
         this.riddler = riddler;
         this.timer = null;
+        this.allowAnwsers = true;
     }
 
     /**
@@ -121,6 +122,7 @@ class gameroom {
 
                     this.masterUpdate();
                     this.playerUpdate();
+                    this.allowAnwsers = true;
                 }, (err) => {
 
                 });
@@ -144,7 +146,14 @@ class gameroom {
      */
     finishQuestion() {
         this.stoptimer();
+        this.allowAnwsers = false;
         //show results
+        this.generateGamestate().then((state) => {
+            state.roundup = true;
+            this.masters.forEach((socket) => {
+                socket.emit('gameUpdate', state);
+            });
+        });
 
         //nextquestion
         this.timer = setTimeout(() => {
@@ -164,26 +173,30 @@ class gameroom {
             //add event managers
 
             socket.on('anwser', (data) => {
-                plyr.ready = true;
-                this.masterUpdate();
+                if (this.allowAnwsers) {
+                    plyr.ready = true;
+                    plyr.lastanwser = data;
+                    this.masterUpdate();
 
-                if (this.round === 0) {
-                    this.checkStart().then((res) => {
-                        this.nextQuestion();
-                    }, (rej) => {
+                    if (this.round === 0) {
+                        this.checkStart().then((res) => {
+                            this.nextQuestion();
+                        }, (rej) => {
 
-                    });
-                } else if (this.round > 0) {
-                    this.checkFinishQuestion().then((res) => {
-                        this.finishQuestion();
-                    }, (rej) => {
+                        });
+                    } else if (this.round > 0) {
+                        this.checkFinishQuestion().then((res) => {
+                            this.finishQuestion();
+                        }, (rej) => {
 
-                    });
+                        });
+                    }
                 }
             });
 
             //if game has not started
             if (this.round === 0) {
+                this.allowAnwsers = true;
                 //ask if player is ready
                 socket.emit('question', {
                     q: 'ready to start?',
@@ -198,6 +211,7 @@ class gameroom {
     resetReadystate() {
             this.players.forEach((player) => {
                 player.ready = false;
+                player.lastanwser = null;
             });
         }
         /**
@@ -244,13 +258,16 @@ class gameroom {
             this.players.forEach((player) => {
                 plyrs.push({
                     name: player.name,
-                    ready: player.ready
+                    ready: player.ready,
+                    score: player.score,
+                    lastanwser: player.lastanwser
                 });
             });
             let gamestate = {
                 masters: this.masters.length,
                 players: plyrs,
-                round: this.round
+                round: this.round,
+                roundup: false
             };
             res(gamestate);
         });

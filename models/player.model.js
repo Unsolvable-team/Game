@@ -3,6 +3,8 @@ class player {
         this.name = name;
         this.socket = socket;
         this.ready = false;
+        this.score = 0;
+        this.lastanwser = null;
     }
 }
 
