@@ -5,6 +5,7 @@ master.init = function() {
 
     master.roomcode = document.querySelector('#roomcode').innerHTML;
     master.window = document.querySelector('#Gamewindow');
+    master.timerwindow = document.querySelector('#Timerwindow');
 
     master.socket = io({
         query: {
@@ -46,6 +47,11 @@ master.init = function() {
     master.socket.on('err', function(err) {
         if (err === 'room not found') {
             window.location.replace(window.location.hostname);
+        }
+    });
+    master.socket.on('timerUpdate', function(nr) {
+        if (nr.time && nr.time !== 0) {
+            //start timer and update timerwindow
         }
     });
 };
