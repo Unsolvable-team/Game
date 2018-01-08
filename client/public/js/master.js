@@ -40,6 +40,13 @@ master.init = function() {
         window += '</div>';
         master.window.innerHTML = window;
     };
+    master.updateTimer = function() {
+        master.counter++;
+        if (master.counter < master.maxcounter) {
+            //display number in canvas
+        }
+    };
+
     master.socket.on('gameUpdate', function(state) {
         master.state = state;
         master.updateScreen();
@@ -50,8 +57,15 @@ master.init = function() {
         }
     });
     master.socket.on('timerUpdate', function(nr) {
+        master.counter = 0;
+        clearInterval(master.timer);
+
         if (nr.time && nr.time !== 0) {
             //start timer and update timerwindow
+            master.maxcounter = nr;
+            master.timer = setInterval(function() {
+                master.updateTimer();
+            }, 1000);
         }
     });
 };
