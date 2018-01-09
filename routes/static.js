@@ -1,13 +1,18 @@
 const init = (roomservice) => {
     const express = require('express');
     let router = express.Router();
+    const riddler = require('../services/riddlerservice');
 
-    router.get('/', (req, res, next) => {
-        res.render('index', { title: 'Unsolvable' });
+    router.get('/', (req, res) => {
+        riddler.getqSets().then((qsets) => {
+            res.render('index', { title: 'Unsolvable', qsets: qsets });
+        });
     });
 
-    router.post('/new', (req, res, next) => {
-        roomservice.newRoom().then((roomcode) => {
+    router.post('/new', (req, res) => {
+        let qsets = req.body.qsets;
+        console.log(qsets);
+        roomservice.newRoom(qsets).then((roomcode) => {
             res.render('gameMaster', { roomcode: roomcode });
         }, (err) => {
             res.render('index', { title: 'Unsolvable', err: err });
@@ -15,7 +20,7 @@ const init = (roomservice) => {
 
     });
 
-    router.post('/join', (req, res, next) => {
+    router.post('/join', (req, res) => {
         let name = req.body.username;
         let rcode = req.body.roomcode;
 
@@ -32,8 +37,6 @@ const init = (roomservice) => {
                 });
             }
         });
-
-
     });
     return router;
 };

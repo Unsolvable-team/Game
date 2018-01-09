@@ -27,8 +27,32 @@
     </div>
     <div>
         <form method="POST" , action="/new" , enctype="json">
+            <table>
+                <thead>
+                    <tr>
+                        <th>set</th>
+                        <th>creator</th>
+                        <th># of questions</th>
+                        <th>select</th>
+                    </tr>
+                </thead>
+                </tbody>
+                    each set in qsets
+                        <tr>
+                            td= set._id.set
+                            td= set._id.user
+                            td= set.count
+                            td
+                                input(
+                                    type='checkbox'
+                                    name='qsets'
+                                    value= set._id
+                                    )
+                        </tr>
+                </tbody>
+            </table>
             <p>
-                <input type="submit" , value="Create" />
+                <input type="submit" , value="Create Room" />
             </p>
         </form>
     </div>

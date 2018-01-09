@@ -1,0 +1,120 @@
+[{
+        "q": "Which franchise does the creature &quot;Slowpoke&quot; originate from?",
+        "a": ["Dragon Ball", "Sonic The Hedgehog", "Yugioh"],
+        "correct": "Pokemon",
+        "user": "unsolvable-team",
+        "set": "standard"
+    },
+    {
+        "q": "The difference between the lengths of a Boeing 777-300ER and an Airbus A350-1000 is closest to:",
+        "a": ["1m", "10m ", "100m"],
+        "correct": "0.1m",
+        "user": "unsolvable-team",
+        "set": "standard"
+    },
+    {
+        "q": "What is the age of Ash Ketchum in Pokemon when he starts his journey?",
+        "a": ["11", "12", "9"],
+        "correct": "10",
+        "user": "unsolvable-team",
+        "set": "standard"
+    },
+    {
+        "q": "What is the English title of the vaporwave track &quot;\u30ea\u30b5\u30d5\u30e9\u30f3\u30af420 \/ \u73fe\u4ee3\u306e\u30b3\u30f3\u30d4\u30e5\u30fc&quot; by Macintosh Plus (Vektroid)?",
+        "a": ["Smoke Weed 420 \/ Everyday", "Make Your Move 420 \/ My Mind", "It&#039;s All In Your Head 420 \/ Understand"],
+        "correct": "Lisa Frank 420 \/ Modern Computing",
+        "user": "unsolvable-team",
+        "set": "standard"
+    },
+    {
+        "q": "Which one of these actors is said to be cut from the film &#039;E.T. the Extra-Terrestrial&#039;?",
+        "a": ["Michael J. Fox", "Andy Kaufman", "Arnold Schwarzenegger"],
+        "correct": "Harrison Ford",
+        "user": "unsolvable-team",
+        "set": "standard"
+    },
+    {
+        "q": "Which movie of film director Stanley Kubrick is known to be an adaptation of a Stephen King novel?",
+        "a": ["2001: A Space Odyssey", " Dr. Strangelove ", "Eyes Wide Shut"],
+        "correct": "The Shining",
+        "user": "unsolvable-team",
+        "set": "standard"
+    },
+    {
+        "q": "What is former United States President Bill Clinton&#039;s full name?",
+        "a": ["William Roosevelt Clinton", "William Truman Clinton", "William Lincoln Clinton"],
+        "correct": "William Jefferson Clinton",
+        "user": "unsolvable-team",
+        "set": "standard"
+    },
+    {
+        "q": "What does GHz stand for?",
+        "a": ["Gigahotz", "Gigahetz", "Gigahatz"],
+        "correct": "Gigahertz",
+        "user": "unsolvable-team",
+        "set": "standard"
+    },
+    {
+        "q": "The programming language &#039;Swift&#039; was created to replace what other programming language?",
+        "a": ["C#", "Ruby", "C++"],
+        "correct": "Objective-C",
+        "user": "unsolvable-team",
+        "set": "standard"
+    },
+    {
+        "q": "The computer OEM manufacturer Clevo, known for its Sager notebook line, is based in which country?",
+        "a": ["United States", "Germany", "China (People&#039;s Republic of)"],
+        "correct": "Taiwan",
+        "user": "unsolvable-team",
+        "set": "standard"
+    },
+    {
+        "q": "What was the name given to Android 4.3?",
+        "a": ["Lollipop", "Nutella", "Froyo"],
+        "correct": "Jelly Bean",
+        "user": "unsolvable-team",
+        "set": "standard"
+    },
+    {
+        "q": "How many cores does the Intel i7-6950X have?",
+        "a": ["12", "8", "4"],
+        "correct": "10",
+        "user": "unsolvable-team",
+        "set": "standard"
+    },
+    {
+        "q": "In CSS, which of these values CANNOT be used with the &quot;position&quot; property?",
+        "a": ["static", "absolute", "relative"],
+        "correct": "center",
+        "user": "unsolvable-team",
+        "set": "standard"
+    },
+    {
+        "q": "In &quot;Hexadecimal&quot;, what color would be displayed from the color code? &quot;#00FF00&quot;?",
+        "a": ["Red", "Blue", "Yellow"],
+        "correct": "Green",
+        "user": "unsolvable-team",
+        "set": "standard+"
+    },
+    {
+        "q": "Which operating system was released first?",
+        "a": ["Windows", "Linux", "OS\/2"],
+        "correct": "Mac OS",
+        "user": "unsolvable-team",
+        "set": "standard+"
+    },
+    {
+        "q": "Laserjet and inkjet printers are both examples of what type of printer?",
+        "a": ["Impact printer", "Daisywheel printer", "Dot matrix printer"],
+        "correct": "Non-impact printer",
+        "user": "unsolvable-team",
+        "set": "standard+"
+    },
+    {
+        "q": "The name of technology company HP stands for what?",
+        "a": ["Howard Packmann", "Husker-Pollosk", "Hellman-Pohl"],
+        "correct": "Hewlett-Packard",
+        "user": "unsolvable-team",
+        "set": "standard+"
+    }
+]
