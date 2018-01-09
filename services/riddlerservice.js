@@ -16,11 +16,6 @@ Riddler.getQuestion = () => {
 Riddler.getqSets = () => {
     const p = new Promise((res, rej) => {
         Question.aggregate([{
-            // $project: {
-            //     set_id: { $concat: ["$set", "$user"] },
-            //     set: { $concat: ['$set'] },
-            //     user: { $concat: ['$user'] }
-            // },
             $group: {
                 _id: { set: "$set", user: '$user' },
                 count: { $sum: 1 }
@@ -28,8 +23,33 @@ Riddler.getqSets = () => {
         }]).exec((err, set) => {
             if (err) {
                 rej(err);
+                return;
             } else {
                 res(set);
+                return;
+            }
+        });
+    });
+    return p;
+};
+
+Riddler.getqSetsUser = (username) => {
+    const p = new Promise((res, rej) => {
+        Question.aggregate([{
+                $match: { 'user': username }
+            },
+            {
+                $group: {
+                    _id: { set: '$set', user: '$user' },
+                    count: { $sum: 1 }
+                }
+            }
+        ]).exec((err, sets) => {
+            if (err) {
+                rej(err);
+                return;
+            } else {
+                res(sets);
             }
         });
     });

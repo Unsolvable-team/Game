@@ -10,7 +10,17 @@
 </head>
 
 <body>
+    <header>
+        <nav>
+            -if(!username)
+                <a href='/login'>login</a>
+            -else
+                <a href= '/logout'>logout</a>
+                <a href= '/profile'>profile</a>
+        </nav>
+    </header>
     <div>
+        h1= username
         <form method="POST" , action="/join" , enctype="json">
             <p>
                 <label for="roomcode">RoomCode</label> <br />
@@ -18,7 +28,11 @@
             </p>
             <p>
                 <label for="username">Username</label> <br />
-                <input id='username' , name="username" />
+                input(
+                    id= 'username'
+                    name= 'username'
+                    value= username
+                )
             </p>
             <p>
                 <input type="submit" , value="Join" />

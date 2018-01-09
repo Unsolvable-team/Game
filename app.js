@@ -10,6 +10,7 @@ const port = 80;
 const hostname = '0.0.0.0';
 let gameservice = require('./services/gameservice');
 const router = require('./routes/static.js')(gameservice);
+const session = require('express-session');
 
 //connect to db
 mongoose.connect('mongodb://webserver:paswoord_voor_webserver20182018@localhost/unsolvable', {
@@ -26,6 +27,11 @@ app.use(express.static('client/public'));
 app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
     extended: true
+}));
+app.use(session({
+    secret: 'this is unsolvable',
+    resave: true,
+    saveUninitialized: false
 }));
 app.use('/', router);
 app.set('views', path.join(__dirname, 'client/src/views'));
