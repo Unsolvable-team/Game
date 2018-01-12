@@ -9,7 +9,6 @@ const init = (roomservice) => {
 
         riddler.getqSets().then((qsets) => {
             if (req.session && req.session.userId) {
-                console.log(req.session.userId);
                 Userservice.getUser(req.session.userId).then((user) => {
                     res.render('index', { title: 'Unsolvable', qsets: qsets, username: user[0].username });
                 }, (err) => {
@@ -89,18 +88,22 @@ const init = (roomservice) => {
             req.body.username &&
             req.body.password &&
             req.body.passwordConf) {
-
-            Userservice.register(userData).then((result) => {
-                Userservice.login(userData).then((user) => {
-                    req.session.userId = user._id;
-                    res.redirect('/profile');
+            if (req.body.password === req.body.passwordConf) {
+                Userservice.register(userData).then((result) => {
+                    Userservice.login(userData).then((user) => {
+                        req.session.userId = user._id;
+                        res.redirect('/profile');
+                    }, (err) => {
+                        console.log(err);
+                        res.redirect('/');
+                    });
                 }, (err) => {
-                    console.log(err);
-                    res.redirect('/');
+                    res.render('register', { userData: userData, err: err });
                 });
-            }, (err) => {
-                res.render('register', { userData: userData, err: err });
-            });
+            } else {
+                res.render('register', { userData: userData, err: 'password and confirm password fields need to be the same' });
+            }
+
         } else {
             res.render('register', { userData: userData, err: 'please fill in the complete form' });
         }

@@ -4,17 +4,12 @@ const bcrypt = require('bcrypt');
 
 Userservice.register = (userData) => {
     const p = new Promise((res, rej) => {
-        // User.create(userData, (err, user) => {
-        //     if (err) {
-        //         rej(err);
-        //         return;
-        //     } else {
-        //         res(user);
-        //         return;
-        //     }
         let user = new User(userData);
         user.save(user, (err) => {
             if (err) {
+                if (err.indexOf('email_1 dup key') !== -1) {
+                    err = 'email already registered';
+                }
                 rej(err);
                 return;
             } else {
@@ -32,6 +27,7 @@ Userservice.login = (userData) => {
         if (userData.password && userData.email) {
             User.findOne({ email: userData.email }).exec((err, user) => {
                 if (err) {
+                    console.log(err);
                     rej(err);
                     return;
                 } else if (!user) {
@@ -43,7 +39,7 @@ Userservice.login = (userData) => {
                             res(user);
                             return;
                         } else {
-                            rej(err);
+                            rej('email or password was incorrect');
                             return;
                         }
                     });

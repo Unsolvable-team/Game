@@ -20,6 +20,11 @@ let userschema = new mongoose.Schema({
         required: true
     }
 });
+//validate email
+userschema.path('email').validate((email) => {
+    var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+    return emailRegex.test(email); // Assuming email has a text attribute
+}, 'email address is invalid');
 
 //hash password
 userschema.pre('save', (next, user) => {
