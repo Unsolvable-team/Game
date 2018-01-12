@@ -1,5 +1,3 @@
-import { setTimeout, clearTimeout } from 'timers';
-
 const player = require('./player.model');
 
 const crypto = require("crypto");

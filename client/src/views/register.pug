@@ -1,0 +1,72 @@
+<form method="POST" , action="/register" , enctype="json">
+- if(err)
+    h1= err
+    <p>
+        <label for="email">Email</label> <br />
+        if(userData)
+            input(
+                id= 'email'
+                name= 'email'
+                value= userData.email
+            )
+        else
+            input(
+                id= 'email'
+                name= 'email'
+            )
+    </p>
+    <p>
+        <label for="username">Username</label> <br />
+        if(userData)
+            input(
+                id= 'username'
+                name= 'username'
+                type= 'text'
+                value= userData.username
+            )
+        else
+            input(
+                id= 'username'
+                name= 'username'
+                type= 'text'
+            )
+    </p>
+    <p>
+        <label for="password">password</label> <br />
+        if(userData)
+            input(
+                id= 'password'
+                name= 'password'
+                type= 'password'
+                value= userData.password
+            )
+        else
+            input(
+                id= 'password'
+                name= 'password'
+                type= 'password'
+            )
+    </p>
+    <p>
+        <label for="passwordConf">confirm password</label> <br />
+        if(userData)
+            input(
+                id= 'passwordConf'
+                name= 'passwordConf'
+                type= 'password'
+                value= userData.passwordConf
+            )
+        else
+            input(
+                id= 'passwordConf'
+                name= 'passwordConf'
+                type= 'password'
+            )
+    </p>
+    <p class='errormessage'>
+        =err
+    </p>
+    <p>
+        <input type="submit" , value="Register" />
+    </p>
+</form>

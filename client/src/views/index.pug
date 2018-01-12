@@ -10,7 +10,17 @@
 </head>
 
 <body>
+    <header>
+        <nav>
+            -if(!username)
+                <a href='/login'>login</a>
+            -else
+                <a href= '/logout'>logout</a>
+                <a href= '/profile'>profile</a>
+        </nav>
+    </header>
     <div>
+        h1= username
         <form method="POST" , action="/join" , enctype="json">
             <p>
                 <label for="roomcode">RoomCode</label> <br />
@@ -18,7 +28,11 @@
             </p>
             <p>
                 <label for="username">Username</label> <br />
-                <input id='username' , name="username" />
+                input(
+                    id= 'username'
+                    name= 'username'
+                    value= username
+                )
             </p>
             <p>
                 <input type="submit" , value="Join" />
@@ -27,8 +41,32 @@
     </div>
     <div>
         <form method="POST" , action="/new" , enctype="json">
+            <table>
+                <thead>
+                    <tr>
+                        <th>set</th>
+                        <th>creator</th>
+                        <th># of questions</th>
+                        <th>select</th>
+                    </tr>
+                </thead>
+                </tbody>
+                    each set in qsets
+                        <tr>
+                            td= set._id.set
+                            td= set._id.user
+                            td= set.count
+                            td
+                                input(
+                                    type='checkbox'
+                                    name='qsets'
+                                    value= set._id
+                                    )
+                        </tr>
+                </tbody>
+            </table>
             <p>
-                <input type="submit" , value="Create" />
+                <input type="submit" , value="Create Room" />
             </p>
         </form>
     </div>

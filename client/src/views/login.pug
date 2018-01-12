@@ -1,0 +1,41 @@
+<form method="POST" , action="/login" , enctype="json">
+    <p>
+
+        <label for="email">Email</label> <br />
+        if(userData)
+            input(
+                id= 'email'
+                name= 'email'
+                type= 'email'
+                value= userData.email
+            )
+        else
+            input(
+                id= 'email'
+                name= 'email'
+                type= 'email'
+            )
+    </p>
+    <p>
+        <label for="password">password</label> <br />
+        if(userData)
+            input(
+                id= 'password'
+                name= 'password'
+                type= 'password'
+                value= userData.password
+            )
+        else
+            input(
+                id= 'password'
+                name= 'password'
+                type= 'password'
+            )
+    </p>
+    <p class='errormessage'>
+        =err
+    </p>
+    <p>
+        <input type="submit" , value="login" />
+    </p>
+</form>
