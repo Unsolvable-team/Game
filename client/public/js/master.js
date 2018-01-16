@@ -1,6 +1,5 @@
 var master = {};
 
-
 master.init = function() {
 
     master.roomcode = document.querySelector('#roomcode').innerHTML;
@@ -43,7 +42,9 @@ master.init = function() {
     master.updateTimer = function() {
         master.counter++;
         if (master.counter < master.maxcounter) {
-            //display number in canvas
+            master.timerwindow.innerHTML = `${master.counter}`;
+        } else {
+            master.timerwindow.innerHTML = '';
         }
     };
 
@@ -56,18 +57,25 @@ master.init = function() {
             window.location.replace(window.location.hostname);
         }
     });
+
     master.socket.on('timerUpdate', function(nr) {
         master.counter = 0;
         clearInterval(master.timer);
-
+        master.timerwindow.innerHTML = '';
         if (nr.time && nr.time !== 0) {
             //start timer and update timerwindow
-            master.maxcounter = nr;
+            master.maxcounter = nr.time;
             master.timer = setInterval(function() {
                 master.updateTimer();
             }, 1000);
         }
     });
+
+    master.socket.on('roundup', function(state) {
+        master.window.innerHTML = '';
+    });
+
+
 };
 
 master.init();

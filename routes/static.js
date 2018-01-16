@@ -25,11 +25,23 @@ const init = (roomservice) => {
 
     router.post('/new', (req, res) => {
         let qsets = req.body.qsets;
-        roomservice.newRoom(qsets).then((roomcode) => {
-            res.render('gameMaster', { roomcode: roomcode });
-        }, (err) => {
-            res.render('index', { title: 'Unsolvable', err: err });
-        });
+        if (qsets) {
+            let sets = [];
+            if (qsets instanceof Array) {
+                qsets.forEach((set) => {
+                    sets.push(JSON.parse(set));
+                });
+            } else {
+                sets.push(JSON.parse(qsets));
+            }
+            roomservice.newRoom(sets).then((roomcode) => {
+                res.render('gameMaster', { roomcode: roomcode });
+            }, (err) => {
+                res.redirect('/?err=' + err.toString('base64'));
+            });
+        } else {
+            res.redirect('/?err=' + 'no qsets'.toString('base64'));
+        }
 
     });
 
@@ -39,10 +51,7 @@ const init = (roomservice) => {
 
         roomservice.findRoom(rcode).then((ind) => {
             if (ind === -1) {
-                res.render('index', {
-                    title: 'Unsolvable',
-                    err: 'room not found'
-                });
+                res.redirect('/?err=' + 'room not found'.toString('base64'));
             } else {
                 res.render('player', {
                     roomcode: rcode,

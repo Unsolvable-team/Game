@@ -2,16 +2,26 @@ const player = require('./player.model');
 
 const crypto = require("crypto");
 
+const shuffle = (a) => {
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
 class gameroom {
-    constructor(riddler) {
+    constructor(riddler, sets) {
         this.roomcode = crypto.randomBytes(3).toString('hex');
         this.players = [];
         this.masters = [];
         this.round = 0;
-        this.currentquestion = null;
-        this.riddler = riddler;
+        this.currentquestion = { q: 'waiting for players' };
         this.timer = null;
         this.allowAnwsers = true;
+        riddler.getQuestions(sets).then((questions) => {
+            this.questions = questions;
+        });
     }
 
     /**
@@ -45,19 +55,18 @@ class gameroom {
                 //if someone is ready, but no timer is running
                 if (readycount > 0 && readycount < this.players.length && this.timer === null) {
                     //start game after 60 seconds
-                    this.timer = setTimeout(() => {
-                        res();
-                        return;
-                    }, 60 * 1000); //time to get ready
-                    this.timerUpdate(60 * 1000);
-
+                    if (this.timer === null) {
+                        this.timer = setTimeout(() => {
+                            res();
+                            this.stoptimer();
+                            return;
+                        }, 60 * 1000); //time to get ready
+                        this.timerUpdate(60 * 1000);
+                    }
                     //if everyone is ready
                 } else if (readycount === this.players.length) {
                     //clear timer
-                    if (this.timer !== null) {
-                        clearTimeout(this.timer);
-                        this.timer = null;
-                    }
+                    this.stoptimer();
                     //start game
                     res();
                     return;
@@ -108,35 +117,46 @@ class gameroom {
      * Starts timer to stop taking anwsers from players
      */
     nextQuestion() {
-        new Promise((res, rej) => {
-            this.stoptimer();
-            this.round++;
-            this.resetReadystate();
-            if (this.round > 0) {
-                this.riddler.getQuestion().then((q) => {
-                    this.currentquestion = q;
+        this.stoptimer();
+        this.round++;
+        this.resetReadystate();
+        if (this.round > 0) {
+            this.getQuestion().then((q) => {
+                this.currentquestion = q;
+                if (this.timer === null) {
                     this.timer = setTimeout(() => {
                         this.finishQuestion();
                     }, 30 * 1000); // after 30s
-                    this.timerUpdate(30 * 1000);
-                    this.masterUpdate();
-                    this.playerUpdate();
-                    this.allowAnwsers = true;
-                }, (err) => {
+                }
+                this.timerUpdate(30 * 1000);
+                this.masterUpdate();
+                this.playerUpdate();
+                this.allowAnwsers = true;
+            }, (err) => {
 
-                });
-            }
-        }).then();
-
+            });
+        }
     }
+    getQuestion() {
+        const p = new Promise((res, rej) => {
+            let i = Math.floor(Math.random() * this.questions.length);
+            let q = this.questions[i];
+            this.questions.splice(i, 1);
+            res(q);
+            return;
+        });
+        return p;
+    }
+
 
     /**
      * Stops the current timer if one is running and sets the value to null
      */
     stoptimer() {
         if (this.timer !== null) {
-            clearInterval(this.timer);
+            clearTimeout(this.timer);
         }
+        this.resetReadystate();
         this.timer = null;
         this.timerUpdate(0);
     }
@@ -148,17 +168,27 @@ class gameroom {
         this.stoptimer();
         this.allowAnwsers = false;
         //show results
-        this.generateGamestate().then((state) => {
-            state.roundup = true;
+        this.generateRoundup().then((state) => {
             this.masters.forEach((socket) => {
-                socket.emit('gameUpdate', state);
+                socket.emit('roundup', state);
             });
         });
 
         //nextquestion
-        this.timer = setTimeout(() => {
-            this.nextQuestion();
-        }, 10 * 1000); //after 10s
+        if (this.timer === null) {
+            this.timer = setTimeout(() => {
+                this.nextQuestion();
+            }, 10 * 1000); //after 10s
+        } else {
+            console.log('error1');
+        }
+    }
+
+    generateRoundup() {
+        const p = new Promise((res, rej) => {
+            res({});
+        });
+        return p;
     }
 
     /**
@@ -238,9 +268,13 @@ class gameroom {
          */
     playerUpdate() {
             this.players.forEach((player) => {
+                let a = [];
+                a = a.concat(this.currentquestion.a);
+                a.push(this.currentquestion.correct);
+                //TODO: shuffle a
                 player.socket.emit('question', {
                     q: this.currentquestion.q,
-                    a: this.currentquestion.a
+                    a: shuffle(a)
                 });
             });
         }
@@ -256,14 +290,13 @@ class gameroom {
                     name: player.name,
                     ready: player.ready,
                     score: player.score,
-                    lastanwser: player.lastanwser
                 });
             });
             let gamestate = {
                 masters: this.masters.length,
                 players: plyrs,
                 round: this.round,
-                roundup: false
+                question: this.currentquestion.q
             };
             res(gamestate);
         });

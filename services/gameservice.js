@@ -2,12 +2,12 @@ const gameroom = require('../models/gameroom.model');
 const riddler = require('./riddlerservice');
 let rooms = [];
 //creates a new room with unique code and returns that code
-let newRoom = () => {
+let newRoom = (sets) => {
     const p = new Promise((res, rej) => {
-        let room = new gameroom(riddler);
+        let room = new gameroom(riddler, sets);
 
         while (findRoomSync(room.roomcode) !== -1) {
-            room = new gameroom(riddler);
+            room = new gameroom(riddler, sets);
         }
         rooms.push(room);
         res(room.roomcode);
