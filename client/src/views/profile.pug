@@ -1,1 +1,61 @@
-h1=user.username
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.red-amber.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+    link(rel="stylesheet", href="./css/index.css")
+
+    title= 'Unsolvable'
+</head>
+<body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+            span#mdl-layout-title='profile of '+user.username 
+            <div class="mdl-layout-spacer"></div>
+            <nav class="mdl-navigation mdl-layout--large-screen-only">
+                <a class="mdl-navigation__link" href= '/logout'>logout</a>
+                <a class="mdl-navigation__link" href= '/'>home</a>
+            </nav>
+            </div>
+        </header>
+        <div class="mdl-layout__drawer">
+            <span class="mdl-layout-title">Unsolvable</span>
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href= '/logout'>logout</a>
+                <a class="mdl-navigation__link" href= '/'>home</a>
+            </nav>
+        </div>
+        <main class="mdl-layout__content">
+            <div class="page-content">
+            h1 Manage your quizes
+            <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                            <thead>
+                                <tr>
+                                    <th class="mdl-data-table__cell--non-numeric">set</th>
+                                    <th># of questions</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            </tbody>
+                                //- each set in qsets
+                                //-     <tr>
+                                //-         td(class="mdl-data-table__cell--non-numeric")= set._id.set
+                                //-         td= set.count
+                                //-         td
+                                //-             button(class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored") Edit
+                                //-     </tr>
+                            </tbody>
+                        </table>
+            </div>
+        </main>
+</body>
+</html>
+

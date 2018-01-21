@@ -1,0 +1,12 @@
+.page-content {
+    width: 90%;
+    margin: 0 auto;
+    padding-left: 40%
+}
+
+@media screen and (max-width: 1000px) {
+    .page-content {
+        padding-left: 0;
+        padding: 10px;
+    }
+}

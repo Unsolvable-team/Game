@@ -1,72 +1,128 @@
-<form method="POST" , action="/register" , enctype="json">
-- if(err)
-    h1= err
-    <p>
-        <label for="email">Email</label> <br />
-        if(userData)
-            input(
-                id= 'email'
-                name= 'email'
-                value= userData.email
-            )
-        else
-            input(
-                id= 'email'
-                name= 'email'
-            )
-    </p>
-    <p>
-        <label for="username">Username</label> <br />
-        if(userData)
-            input(
-                id= 'username'
-                name= 'username'
-                type= 'text'
-                value= userData.username
-            )
-        else
-            input(
-                id= 'username'
-                name= 'username'
-                type= 'text'
-            )
-    </p>
-    <p>
-        <label for="password">password</label> <br />
-        if(userData)
-            input(
-                id= 'password'
-                name= 'password'
-                type= 'password'
-                value= userData.password
-            )
-        else
-            input(
-                id= 'password'
-                name= 'password'
-                type= 'password'
-            )
-    </p>
-    <p>
-        <label for="passwordConf">confirm password</label> <br />
-        if(userData)
-            input(
-                id= 'passwordConf'
-                name= 'passwordConf'
-                type= 'password'
-                value= userData.passwordConf
-            )
-        else
-            input(
-                id= 'passwordConf'
-                name= 'passwordConf'
-                type= 'password'
-            )
-    </p>
-    <p class='errormessage'>
-        =err
-    </p>
-    <p>
-        <input type="submit" , value="Register" />
-    </p>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.red-amber.min.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+    <script defer src='./js/register.js'></script>
+
+    title= 'Unsolvable'
+</head>
+<body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+            <span class="mdl-layout-title">Register</span>
+            <div class="mdl-layout-spacer"></div>
+            <nav class="mdl-navigation mdl-layout--large-screen-only">
+                <a class="mdl-navigation__link" href='/'>home</a>
+                <a class="mdl-navigation__link" href='/login'>login</a>
+            </nav>
+            </div>
+        </header>
+        <div class="mdl-layout__drawer">
+            <span class="mdl-layout-title">Unsolvable</span>
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href='/'>home</a>
+                <a class="mdl-navigation__link" href='/login'>login</a>
+            </nav>
+    </div>
+        <main class="mdl-layout__content">
+            <div class="page-content">
+                <form method="POST" , action="/register" , enctype="json">
+                    if(err)
+                        h1= err
+                    <div class="mdl-textfield mdl-js-textfield">
+                        if(userData)
+                            input(
+                                class="mdl-textfield__input"
+                                id= 'email'
+                                name= 'email'
+                                type= 'email'
+                                value= userData.email
+                            )
+                        else
+                            input(
+                                class="mdl-textfield__input"
+                                id= 'email'    
+                                name= 'email'
+                                type= 'email'
+                            )
+                            <label class="mdl-textfield__label" for="email">Email</label>
+                    </div>
+                    br
+                    <div class="mdl-textfield mdl-js-textfield">
+                        if(userData)
+                            input(
+                                class="mdl-textfield__input"
+                                id= 'name'
+                                name= 'username'
+                                type= 'text'
+                                value= userData.username
+                            )
+                        else
+                            input(
+                                class="mdl-textfield__input"
+                                id= 'name'
+                                name= 'username'
+                                type= 'text'
+                            )
+                        <label class="mdl-textfield__label" for="name">Username</label>
+                    </div>
+                    br
+                    <div class="mdl-textfield mdl-js-textfield">
+                        if(userData)
+                            input(
+                                class="mdl-textfield__input"
+                                id= 'password'
+                                name= 'password'
+                                type= 'password'
+                                value= userData.password
+                            )
+                        else
+                            input(
+                                class="mdl-textfield__input"
+                                id= 'password'
+                                name= 'password'
+                                type= 'password'
+                            )
+                        <label class="mdl-textfield__label" for="password">Password</label>
+                    </div>
+                    br
+                    <div class="mdl-textfield mdl-js-textfield">
+                        if(userData)
+                            input(
+                                class="mdl-textfield__input"
+                                id= 'passwordConf'
+                                name= 'passwordConf'
+                                type= 'passwordConf'
+                                value= userData.passwordConf
+                            )
+                        else
+                            input(
+                                class="mdl-textfield__input"
+                                id= 'passwordConf'
+                                name= 'passwordConf'
+                                type= 'passwordConf'
+                            )
+                        <label class="mdl-textfield__label" for="passwordConf">confirm password</label>
+                    </div>
+                    br
+                    <p class='errormessage'>
+                        =err
+                    </p>
+                    <p>
+                        <input id='register' type="submit" value="Register" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"  disabled/>
+                    </p>
+                </form>
+            </div>
+        </main>
+</body>
+</html>

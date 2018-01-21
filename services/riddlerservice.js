@@ -3,15 +3,31 @@ const Question = require('../models/Question.model');
 let Riddler = {};
 
 Riddler.getQuestion = () => {
-    //TODO/ edit this to use db
     const p = new Promise((res, rej) => {
         res({
             q: 'this is a question',
-            a: ['this is an anwser', 'This, also, is an anwser', 'This is the last anwser']
+            a: ['this is an anwser', 'This, also, is an anwser', 'This is the last anwser'],
+            correct: 'this is the correct anwser'
         });
     });
     return p;
 };
+
+Riddler.getQuestions = (sets) => {
+
+    const p = new Promise((res, rej) => {
+
+        Question.find({ $or: sets }).exec((err, questions) => {
+            if (err) {
+                rej(err);
+                return;
+            }
+            res(questions);
+            return;
+        });
+    });
+    return p;
+}
 
 Riddler.getqSets = () => {
     const p = new Promise((res, rej) => {

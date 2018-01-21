@@ -6,10 +6,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    title= title
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.red-amber.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <script defer src="./js/index.js"></script>
+    <link rel='stylesheet' href= "./css/index.css">
+
+    title= 'Unsolvable'
 </head>
 
 <body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+            <span class="mdl-layout-title">Unsolvable</span>
+            <div class="mdl-layout-spacer"></div>
+            <nav class="mdl-navigation mdl-layout--large-screen-only">
+                -if(!username)
+                    <a class="mdl-navigation__link" href='/login'>login</a>
+                -else
+                    <a class="mdl-navigation__link" href= '/logout'>logout</a>
+                    <a class="mdl-navigation__link" href= '/profile'>profile</a>
+            </nav>
+            </div>
+        </header>
+        <div class="mdl-layout__drawer">
+            <span class="mdl-layout-title">Unsolvable</span>
+            <nav class="mdl-navigation">
+                -if(!username)
+                    <a class="mdl-navigation__link" href='/login'>login</a>
+                -else
+                    <a class="mdl-navigation__link" href= '/logout'>logout</a>
+                    <a class="mdl-navigation__link" href= '/profile'>profile</a>
+            </nav>
+        </div>
+        <main class="mdl-layout__content">
+            <div class="page-content">
+                <div>
+                    <form method="POST"  action="/join"  enctype="json">
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input" type="text" id="roomcode" name= "roomcode">
+                            <label class="mdl-textfield__label" for="roomcode">Roomcode</label>
+                        </div>
+                        br
+                        <div class="mdl-textfield mdl-js-textfield">
+                                input(
+                                    class="mdl-textfield__input"
+                                    type="text"
+                                    id="username" 
+                                    name= "username" 
+                                    value= username)
+                                <label class="mdl-textfield__label" for="username">Username</label>
+                        </div>
+                        <p>
+                            <input id='join' type="submit" value="Join" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"  disabled/>
+                        </p>
+                    </form>
+                </div>
+                <div>
+                    <form method="POST" , action="/new" , enctype="json">
+                        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                            <thead>
+                                <tr>
+                                    <th class="mdl-data-table__cell--non-numeric">set</th>
+                                    <th>creator</th>
+                                    <th># of questions</th>
+                                    <th>select</th>
+                                </tr>
+                            </thead>
+                            </tbody>
+                                each set in qsets
+                                    <tr>
+                                        td(class="mdl-data-table__cell--non-numeric")= set._id.set
+                                        td= set._id.user
+                                        td= set.count
+                                        td
+                                            label(class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for=set.id)
+                                                input(
+                                                    class="mdl-checkbox__input setbox"
+                                                    type='checkbox'
+                                                    name='qsets'
+                                                    id= set.id
+                                                    value= set._id
+                                                    )
+                                    </tr>
+                            </tbody>
+                        </table>
+                        br
+                        <p>
+                            <input id="new" type="submit" value="Create" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"  disabled/>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
     <header>
         <nav>
             -if(!username)
@@ -19,57 +111,7 @@
                 <a href= '/profile'>profile</a>
         </nav>
     </header>
-    <div>
-        h1= username
-        <form method="POST" , action="/join" , enctype="json">
-            <p>
-                <label for="roomcode">RoomCode</label> <br />
-                <input id='roomcode' , name="roomcode" />
-            </p>
-            <p>
-                <label for="username">Username</label> <br />
-                input(
-                    id= 'username'
-                    name= 'username'
-                    value= username
-                )
-            </p>
-            <p>
-                <input type="submit" , value="Join" />
-            </p>
-        </form>
-    </div>
-    <div>
-        <form method="POST" , action="/new" , enctype="json">
-            <table>
-                <thead>
-                    <tr>
-                        <th>set</th>
-                        <th>creator</th>
-                        <th># of questions</th>
-                        <th>select</th>
-                    </tr>
-                </thead>
-                </tbody>
-                    each set in qsets
-                        <tr>
-                            td= set._id.set
-                            td= set._id.user
-                            td= set.count
-                            td
-                                input(
-                                    type='checkbox'
-                                    name='qsets'
-                                    value= set._id
-                                    )
-                        </tr>
-                </tbody>
-            </table>
-            <p>
-                <input type="submit" , value="Create Room" />
-            </p>
-        </form>
-    </div>
+    
 </body>
 
 </html>

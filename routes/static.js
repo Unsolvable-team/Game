@@ -25,23 +25,41 @@ const init = (roomservice) => {
 
     router.post('/new', (req, res) => {
         let qsets = req.body.qsets;
-        roomservice.newRoom(qsets).then((roomcode) => {
-            res.render('gameMaster', { roomcode: roomcode });
-        }, (err) => {
-            res.render('index', { title: 'Unsolvable', err: err });
-        });
+        if (qsets) {
+            let sets = [];
+            if (qsets instanceof Array) {
+                qsets.forEach((set) => {
+                    sets.push(JSON.parse(set));
+                });
+            } else {
+                sets.push(JSON.parse(qsets));
+            }
+            roomservice.newRoom(sets).then((roomcode) => {
+                res.render('gameMaster', { roomcode: roomcode });
+            }, (err) => {
+                res.redirect('/?err=' + err.toString('base64'));
+            });
+        } else {
+            res.redirect('/?err=' + 'no qsets'.toString('base64'));
+        }
 
     });
 
     router.post('/join', (req, res) => {
         let name = req.body.username;
         let rcode = req.body.roomcode;
-
+        if (name) {
+            name = name.toUpperCase();
+        }
+        if (rcode) {
+            rcode = rcode.toLowerCase();
+        }
         roomservice.findRoom(rcode).then((ind) => {
             if (ind === -1) {
-                res.render('index', {
-                    title: 'Unsolvable',
-                    err: 'room not found'
+                res.redirect('/?err=' + 'room not found'.toString('base64'));
+            } else if (name === '' || !name || name === 'MASTER') {
+                res.render('gameMaster', {
+                    roomcode: rcode
                 });
             } else {
                 res.render('player', {
@@ -112,7 +130,6 @@ const init = (roomservice) => {
     router.get('/profile', auth.requiresLogin, (req, res) => {
         Userservice.getUser(req.session.userId).then((user) => {
             riddler.getqSetsUser(user.username).then((sets) => {
-                console.log(user);
                 res.render('profile', { user: user[0], sets: sets });
             }, (err) => {
                 console.log(err);
