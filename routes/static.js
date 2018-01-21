@@ -42,7 +42,6 @@ const init = (roomservice) => {
         } else {
             res.redirect('/?err=' + 'no qsets'.toString('base64'));
         }
-
     });
 
     router.post('/join', (req, res) => {
@@ -71,7 +70,11 @@ const init = (roomservice) => {
     });
 
     router.get('/login', (req, res) => {
-        res.render('login');
+        if (req.session.userId) {
+            res.redirect('/');
+        } else {
+            res.render('login');
+        }
     });
 
     router.post('/login', (req, res) => {
@@ -129,8 +132,8 @@ const init = (roomservice) => {
 
     router.get('/profile', auth.requiresLogin, (req, res) => {
         Userservice.getUser(req.session.userId).then((user) => {
-            riddler.getqSetsUser(user.username).then((sets) => {
-                res.render('profile', { user: user[0], sets: sets });
+            riddler.getqSetsUser(user[0].username).then((sets) => {
+                res.render('profile', { user: user[0], qsets: sets });
             }, (err) => {
                 console.log(err);
                 res.redirect('/');
@@ -154,6 +157,59 @@ const init = (roomservice) => {
 
     });
 
+    router.post('/updateset', auth.requiresLogin, (req, res) => {
+        let inp = req.body.final
+        if (inp) {
+            inp = JSON.parse(inp);
+            Userservice.getUser(req.session.userId).then((user) => {
+                let todel = { set: inp[0].set, user: user[0].username };
+                riddler.delQset(todel).then((r) => {
+                    let proms = [];
+                    inp.forEach((q) => {
+                        proms.push(riddler.addQuestion(q));
+                    });
+                    Promise.all(proms).then((rs) => {
+                        res.redirect('/profile');
+                    }, (err) => {
+                        console.log(err);
+                        res.redirect('/profile');
+                    });
+                }, (err) => {
+                    console.log(err);
+                    res.redirect('/profile');
+                });
+            }, (err) => {
+                console.log(err);
+                res.redirect('/');
+            });
+        } else {
+            res.redirect('/profile');
+        }
+    });
+    router.post('/delset', auth.requiresLogin, (req, res) => {
+        let todel = req.body.todel;
+        if (todel) {
+            todel = JSON.parse(todel);
+            Userservice.getUser(req.session.userId).then((user) => {
+                console.log(todel);
+                if (user[0].username === todel.user) {
+                    riddler.delQset(todel).then((r) => {
+                        res.redirect('/profile');
+                    }, (err) => {
+                        console.log(err);
+                        res.redirect('/profile');
+                    });
+                } else {
+                    res.redirect('/profile');
+                }
+            }, (err) => {
+                console.log(err);
+                res.redirect('/');
+            })
+        } else {
+            res.redirect('/profile');
+        }
+    });
     return router;
 };
 

@@ -2,21 +2,9 @@ const Question = require('../models/Question.model');
 
 let Riddler = {};
 
-Riddler.getQuestion = () => {
-    const p = new Promise((res, rej) => {
-        res({
-            q: 'this is a question',
-            a: ['this is an anwser', 'This, also, is an anwser', 'This is the last anwser'],
-            correct: 'this is the correct anwser'
-        });
-    });
-    return p;
-};
-
 Riddler.getQuestions = (sets) => {
 
     const p = new Promise((res, rej) => {
-
         Question.find({ $or: sets }).exec((err, questions) => {
             if (err) {
                 rej(err);
@@ -66,6 +54,34 @@ Riddler.getqSetsUser = (username) => {
                 return;
             } else {
                 res(sets);
+            }
+        });
+    });
+    return p;
+};
+Riddler.delQset = (set) => {
+    const p = new Promise((res, rej) => {
+        Question.remove(set).exec((err, rs) => {
+            if (err) {
+                rej(err);
+                return;
+            } else {
+                res(rs);
+            }
+        });
+    });
+    return p;
+}
+Riddler.addQuestion = (qs) => {
+    const p = new Promise((res, rej) => {
+        let q = new Question(qs);
+        q.save((err, q) => {
+            if (err) {
+                rej(err);
+                return;
+            } else {
+                res(q);
+                return;
             }
         });
     });

@@ -1,11 +1,30 @@
 .page-content {
-    width: 90%;
+    width: 1000px;
     margin: 0 auto;
-    padding-left: 40%
+}
+
+table {
+    margin: 0 auto;
+}
+
+h2,
+h1 {
+    text-align: center;
+}
+
+.mdl-textfield {
+    margin: 0 auto;
+    display: block;
+}
+
+.mdl-textfield .mdl-button {
+    bottom: 0;
+    position: relative;
 }
 
 @media screen and (max-width: 1000px) {
     .page-content {
+        width: 100%;
         padding-left: 0;
         padding: 10px;
     }
