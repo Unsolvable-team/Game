@@ -23,7 +23,6 @@ Riddler.getQuestions = (sets) => {
                 return;
             }
             res(questions);
-            console.log(questions.length);
             return;
         });
     });

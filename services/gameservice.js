@@ -10,6 +10,9 @@ let newRoom = (sets) => {
             room = new gameroom(riddler, sets);
         }
         rooms.push(room);
+        room.events.on('stop', () => {
+            rooms.splice(rooms.indexOf(room), 1);
+        });
         res(room.roomcode);
     });
     return p;
@@ -20,16 +23,26 @@ let newPlayer = (roomcode, name, socket) => {
         findRoom(roomcode).then((ind) => {
             if (ind === -1) {
                 rej('room not found');
+                return;
             } else {
                 let room = rooms[ind];
+                let ok = true;
                 if (room.players.length > 0) {
                     room.players.forEach((player) => {
-                        if (player.name === name) {
+                        if (player.name === name && player.connected) {
                             rej('player name already exists');
+                            ok = false;
+                            return;
+                        } else if (player.name === name && !player.connected) {
+                            res(room.reconnectPlayer(name, socket));
+                            ok = false;
+                            return;
                         }
                     });
                 }
-                res(room.addPlayer(name, socket));
+                if (ok) {
+                    res(room.addPlayer(name, socket));
+                }
             }
         });
     });

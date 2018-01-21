@@ -5,6 +5,7 @@ class player {
         this.ready = false;
         this.score = 0;
         this.lastanwser = null;
+        this.connected = true;
     }
 }
 
