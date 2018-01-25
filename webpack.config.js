@@ -1,6 +1,6 @@
 let path = require("path");
 let webpack = require("webpack");
-const glob = require("glob");
+//const glob = require("glob");
 
 let commonsPlugin = new webpack.optimize.CommonsChunkPlugin("shared");
 
