@@ -5,15 +5,14 @@ const io = require('socket.io')(http);
 const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const config = require("./config");
 
-const port = 80;
-const hostname = '0.0.0.0';
 let gameservice = require('./services/gameservice');
 const router = require('./routes/static.js')(gameservice);
 const session = require('express-session');
 
 //connect to db
-mongoose.connect('mongodb://webserver:paswoord_voor_webserver20182018@localhost/unsolvable', {
+mongoose.connect(config.DB, {
     useMongoClient: true
 });
 var db = mongoose.connection;
@@ -40,6 +39,6 @@ app.set('view engine', 'pug');
 //setup socket server
 require('./routes/socket.js')(io, gameservice);
 
-http.listen(port, hostname, () => {
-    console.log(` http://${hostname}:${port}/`);
+http.listen(config.port, config.host, () => {
+    console.log(` http://${config.host}:${config.port}/`);
 });
