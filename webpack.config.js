@@ -18,7 +18,7 @@ module.exports = {
         masterstyle: "./style/master.scss"
     },
     output: {
-        path: path.resolve("client/public/"),
+        path: path.resolve("client/public/bundles"),
         filename: "[name].bundle.js"
     },
 
